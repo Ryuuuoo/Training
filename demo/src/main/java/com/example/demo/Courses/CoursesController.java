@@ -1,34 +1,35 @@
 package com.example.demo.Courses;
 
 import com.example.demo.student.Student;
-import com.example.demo.student.StudentController;
-import com.example.demo.student.StudentService;
+import com.example.demo.dto.DepartmentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/courses")
 public class CoursesController {
 
     private final CoursesService coursesService;
-    private final StudentService studentService;
 
 
     @Autowired
-    public CoursesController(CoursesService coursesService , StudentService studentService)
+    public CoursesController(CoursesService coursesService)
     {
         this.coursesService = coursesService;
-        this.studentService = studentService;
     }
 
     @GetMapping
     public List<Courses> getCourses() {return coursesService.getCourses();}
 
+    @GetMapping(path = "department/{deparment}")
+    public DepartmentDto getDepartment(@PathVariable("deparment")String department){
+        return coursesService.getDepartment(department);
+    }
+
     @GetMapping(path = "{coursesId}")
-    public Optional<Courses> getCoursesById(@PathVariable("coursesId")Long coursesId) {
+    public Courses getCoursesById(@PathVariable("coursesId")Long coursesId) {
         return coursesService.findCourseById(coursesId);
     }
 
@@ -47,4 +48,10 @@ public class CoursesController {
         coursesService.updateCourses(coursesId,courseName,Department);
     }
 
+    @GetMapping(path = "studentInCourses/{coursesId}")
+    public List<Student> getStudentInCourse(
+            @PathVariable("coursesId")Long coursesId
+    ){
+        return coursesService.getStudentByCourse(coursesId);
+    }
 }

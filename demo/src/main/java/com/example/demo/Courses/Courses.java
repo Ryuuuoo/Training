@@ -1,9 +1,12 @@
 package com.example.demo.Courses;
 
 import com.example.demo.student.Student;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -24,18 +27,18 @@ public class Courses {
 
     private String courseName;
 
-    private String Department;
+    private String department;
     public Courses() {
     }
 
     public Courses(String courseName, String department) {
         this.courseName = courseName;
-        Department = department;
+        this.department = department;
     }
     public Courses(Long id, String courseName, String department) {
         Id = id;
         this.courseName = courseName;
-        Department = department;
+        this.department = department;
     }
 
     public Long getId() {
@@ -55,12 +58,13 @@ public class Courses {
     }
 
     public String getDepartment() {
-        return Department;
+        return department;
     }
 
     public void setDepartment(String department) {
-        Department = department;
+        this.department = department;
     }
+
 
     @ManyToMany
     @JoinTable(
@@ -68,10 +72,13 @@ public class Courses {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private Set<Student> enrolledStudents = new HashSet<>();
+    private List<Student> enrolledStudents = new ArrayList<>();
 
-    public Set<Student> getEnrolledStudents() {
+    public List<Student> getEnrolledStudents() {
         return enrolledStudents;
     }
 
+    public void setEnrolledStudents(List<Student> enrolledStudents) {
+        this.enrolledStudents = enrolledStudents;
+    }
 }

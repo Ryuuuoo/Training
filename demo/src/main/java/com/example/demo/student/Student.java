@@ -1,12 +1,14 @@
 package com.example.demo.student;
 
 import com.example.demo.Courses.Courses;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import com.example.demo.school.School;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
@@ -101,14 +103,29 @@ public class Student {
                 ", age=" + age +
                 '}';
     }
+    @JsonIgnore
     @ManyToMany(mappedBy = "enrolledStudents")
-    private Set<Courses> courses = new HashSet<>();
+    private List<Courses> courses = new ArrayList<>();
 
-    public void setCourses(Set<Courses> courses) {
+    public void setCourses(List<Courses> courses) {
         this.courses = courses;
     }
 
-    public Set<Courses> getCourses() {
+
+    public List<Courses> getCourses() {
         return courses;
     }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "school_id")
+    private School school;
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
 }
+

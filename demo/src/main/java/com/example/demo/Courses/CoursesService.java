@@ -1,15 +1,12 @@
 package com.example.demo.Courses;
 
 import com.example.demo.student.Student;
+import com.example.demo.dto.DepartmentDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CoursesService {
@@ -49,11 +46,27 @@ public class CoursesService {
         coursesRepository.save(courses);
     }
 
-    public Optional<Courses> findCourseById(Long coursesId) {
+    public Courses findCourseById(Long coursesId) {
         Optional<Courses> coursesOptional = coursesRepository.findById(coursesId);
         if (coursesOptional.isEmpty()){
             throw new IllegalStateException("Id does not exist");
         }
-        return coursesRepository.findById(coursesId);
+        return coursesOptional.orElse(null);
     }
+    public void saveEnrolledStudents(Courses courses){
+        coursesRepository.save(courses);
+    }
+
+    public DepartmentDto getDepartment(String department) {
+        List<Courses> coursesByDepartment = coursesRepository.findCoursesByDepartment(department);
+
+        return new DepartmentDto(department,coursesByDepartment);
+
+    }
+
+    public List<Student> getStudentByCourse(Long coursesId){
+        Courses courses = findCourseById(coursesId);
+        return courses.getEnrolledStudents();
+    }
+
 }

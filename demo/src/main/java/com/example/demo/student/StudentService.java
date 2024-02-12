@@ -2,6 +2,7 @@ package com.example.demo.student;
 
 import com.example.demo.Courses.Courses;
 import com.example.demo.Courses.CoursesRepository;
+import com.example.demo.Courses.CoursesService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
 
     @Autowired
-    private CoursesRepository coursesRepository;
+    private CoursesService coursesService;
 
     public List<Student> getStudents() {
         return studentRepository.findAll();
@@ -64,24 +65,27 @@ public class StudentService {
             }
             student.setEmail(email);
         }
+        studentRepository.save(student);
     }
 
-    public Optional<Student> findStudentById(Long studentId) {
+    public Student findStudentById(Long studentId) {
         Optional<Student> studentOptional = studentRepository.findById(studentId);
         if(studentOptional.isEmpty()){
             throw new IllegalStateException("Student Id not found");
         }
-        return studentRepository.findById(studentId);
+        return studentOptional.orElse(null);
     }
 
     public void enrollStudent(Long studentId, Long coursesId) {
-        Student student = studentRepository.findById(studentId)
-                        .orElseThrow(() -> new IllegalStateException("Student id " + studentId + " doesnt not exist"));
-        Courses courses = coursesRepository.findById(coursesId)
-                        .orElseThrow(() -> new IllegalStateException("doesnt exist"));
-
-        student.getCourses().add(courses);
-        courses.getEnrolledStudents().add(student);
-        studentRepository.save(student);
+        Student student = findStudentById(studentId);
+        Courses courses = coursesService.findCourseById(coursesId);
+//        List<Courses> studentCourses = student.getCourses();
+//        studentCourses.add(courses);
+//        student.setCourses(studentCourses);
+//        studentRepository.save(student);
+        List<Student> enrolledStudents = courses.getEnrolledStudents();
+        enrolledStudents.add(student);
+        courses.setEnrolledStudents(enrolledStudents);
+        coursesService.saveEnrolledStudents(courses);
     }
 }

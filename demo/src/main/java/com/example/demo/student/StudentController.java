@@ -24,7 +24,7 @@ public class StudentController {
 
 
     @GetMapping("/{studentId}") // Correcting the mapping
-    public Optional<Student> getStudentById(@PathVariable("studentId") Long studentId) { // Correcting the annotation placement
+    public Student   getStudentById(@PathVariable("studentId") Long studentId) { // Correcting the annotation placement
         return studentService.findStudentById(studentId); // Correcting the method invocation
     }
 
