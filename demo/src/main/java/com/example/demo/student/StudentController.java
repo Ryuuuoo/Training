@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/student")
@@ -52,4 +51,12 @@ public class StudentController {
             @PathVariable Long coursesId){
         studentService.enrollStudent(studentId,coursesId);
     }
+
+    @PostMapping(path = "{studentId}/school/{schoolId}")
+    public void enrollStudentToSchool(
+            @PathVariable Long studentId,
+            @PathVariable Long schoolId){
+        studentService.enrollStudentToSchool(studentId,schoolId);
+    }
+
 }

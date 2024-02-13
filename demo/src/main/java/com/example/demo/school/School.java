@@ -1,5 +1,10 @@
 package com.example.demo.school;
+
+import com.example.demo.student.Student;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
@@ -38,5 +43,14 @@ public class School {
 
     public void setSchoolName(String schoolName) {
         this.schoolName = schoolName;
+    }
+
+
+
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+    private List<Student> school = new ArrayList<>();
+
+    public List<Student> getSchool() {
+        return school;
     }
 }

@@ -116,16 +116,18 @@ public class Student {
         return courses;
     }
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id")
+    @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
 
     public School getSchool() {
         return school;
     }
 
-    public void setSchool(School school) {
-        this.school = school;
-    }
 }
 

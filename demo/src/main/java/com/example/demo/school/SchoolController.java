@@ -15,7 +15,7 @@ public class SchoolController {
     public SchoolController(SchoolService schoolService) {this.schoolService = schoolService;}
 
     @GetMapping(path = "{schoolId}")
-    public School getSchool(@PathVariable("schooldId")Long schoolId){
+    public School getSchool(@PathVariable("schoolId")Long schoolId){
         return schoolService.getSchool(schoolId);
     }
     @GetMapping
@@ -27,4 +27,14 @@ public class SchoolController {
         schoolService.addNewSchool(school);
     }
 
+    @DeleteMapping(path = "{schoolId}")
+    public void deleteSchool(@PathVariable("schoolId")Long schoolId){
+        schoolService.deleteSchool(schoolId);
+    }
+    @PutMapping(path = "{schoolId}")
+    public void updateStudent(
+            @PathVariable("schoolId") Long schoolId,
+            @RequestParam(required = false) String schoolName){
+        schoolService.updateSchool(schoolId, schoolName);
+    }
 }
